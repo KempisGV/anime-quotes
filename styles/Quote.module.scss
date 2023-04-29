@@ -1,0 +1,49 @@
+.card {
+   cursor: pointer;
+   background-color: #F5F5F5;
+   border-radius: 8px;
+   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+   display: flex;
+   flex-direction: column;
+   overflow: hidden;
+   max-width: 300px;
+   margin: 16px;
+   height: 320px;
+   /* ajusta la altura máxima que quieres para la tarjeta */
+
+   img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+   }
+
+   .cardInfo {
+      padding: 16px;
+      text-align: center;
+
+      .cardName {
+         color: #333333;
+         font-size: 24px;
+         font-weight: bold;
+         margin: 0;
+      }
+
+      .cardAnime {
+         color: #555555;
+         font-size: 18px;
+         margin: 8px 0;
+      }
+
+      .cardQuote {
+         color: #666666;
+         font-size: 14px;
+         margin: 8px 0 0;
+         max-height: 100px;
+         /* establece una altura máxima para la quote */
+         overflow: hidden;
+         transition: max-height 0.3s ease-in-out;
+         /* añade una transición para hacer más suave el cambio de altura */
+      }
+   }
+}
+
