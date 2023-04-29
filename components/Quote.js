@@ -43,7 +43,6 @@ const Quote = ({ anime, character, quote }) => {
       anime: anime,
       imageURL: imageUrl,
     };
-    console.log(newCharacter,'NEW');
     axios.post(`${serverURL}/characters`, newCharacter)
       .then(() => {
         setModalOpen(false);
