@@ -4,6 +4,7 @@ import modalStyles from '@/styles/Modal.module.scss';
 import Modal from './Modal';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useSession } from 'next-auth/react'
 const serverURL = process.env.NEXT_PUBLIC_API_URL;
 
 
@@ -12,7 +13,8 @@ const Quote = ({ anime, character, quote }) => {
   const [characters, setCharacters] = useState([]);
   const [characterData, setCharacterData] = useState(null);
   const [imageUrl, setImageUrl] = useState('');
-  const [showAddImageButton, setShowAddImageButton] = useState(true);
+  const { data: session } = useSession();
+  const isAdmin = process.env.NEXT_PUBLIC_ADMINS.split(',').map(correo => correo.toLowerCase()).includes(session?.user?.email.toLowerCase());
 
 
   useEffect(() => {
@@ -22,10 +24,10 @@ const Quote = ({ anime, character, quote }) => {
   }, []);
 
   useEffect(() => {
-  const newCharacterData = characters.find((c) => c.name === character);
-  setCharacterData(newCharacterData);
-  setImageUrl(newCharacterData?.imageURL || '');
-}, [characters, character]);
+    const newCharacterData = characters.find((c) => c.name === character);
+    setCharacterData(newCharacterData);
+    setImageUrl(newCharacterData?.imageURL || '');
+  }, [characters, character]);
 
 
   const handleModalOpen = () => {
@@ -38,10 +40,6 @@ const Quote = ({ anime, character, quote }) => {
 
   const handleImageUrlChange = (event) => {
     setImageUrl(event.target.value);
-  };
-
-  const handleAddImageClick = () => {
-    setShowAddImageButton(false);
   };
 
   const handleSave = () => {
@@ -80,7 +78,7 @@ const Quote = ({ anime, character, quote }) => {
           <h2 className={modalStyles.modalName}>{character}</h2>
           <p className={modalStyles.modalAnime}>{anime}</p>
           <p className={modalStyles.modalQuote}>{quote}</p>
-          {!characterData && (
+          {(!characterData && isAdmin) && (
             <div className={modalStyles.modalForm}>
               <label htmlFor="image-url" className={modalStyles.modalLabel}>Image URL:</label>
               <input type="text" id="image-url" onChange={handleImageUrlChange} className={modalStyles.modalInput}/>
