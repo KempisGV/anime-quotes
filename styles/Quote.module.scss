@@ -40,9 +40,14 @@
          margin: 8px 0 0;
          max-height: 100px;
          /* establece una altura máxima para la quote */
-         overflow: hidden;
          transition: max-height 0.3s ease-in-out;
          /* añade una transición para hacer más suave el cambio de altura */
+         display: -webkit-box;
+         -webkit-box-orient: vertical;
+         overflow: hidden;
+         text-overflow: ellipsis;
+         -webkit-line-clamp: 4;
+         line-clamp: 4;
       }
    }
 }

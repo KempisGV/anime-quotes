@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import styles from '@/styles/Quote.module.scss';
+import modalStyles from '@/styles/Modal.module.scss';
 import Modal from './Modal';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -57,7 +58,7 @@ const Quote = ({ anime, character, quote }) => {
 
   const imgURL =
     characterData?.image ||
-    'https://static.wikia.nocookie.net/narutho/images/8/8a/Frases-de-Madara-Uchiha.jpg/revision/latest?cb=20170602190407&path-prefix=es';
+    'https://pbs.twimg.com/media/FBfbWyaXsAELFdC.jpg:large';
 
   return (
     <div className={styles.card} onClick={handleModalOpen}>
@@ -68,16 +69,16 @@ const Quote = ({ anime, character, quote }) => {
         <p className={styles.cardQuote}>{quote}</p>
       </div>
       {modalOpen && (
-        <Modal onClose={handleModalClose}>
-          <Image src={imageUrl || imgURL} alt={name} width={500} height={500} />
-          <h2 className="cardName">{character}</h2>
-          <p className="cardAnime">{anime}</p>
-          <p className="cardQuote">{quote}</p>
+        <Modal onClose={handleModalClose} className={modalStyles.modal}>
+          <Image src={imageUrl || imgURL} alt={character} width={500} height={500} className={modalStyles.modalImage} />
+          <h2 className={modalStyles.modalName}>{character}</h2>
+          <p className={modalStyles.modalAnime}>{anime}</p>
+          <p className={modalStyles.modalQuote}>{quote}</p>
           {!characterData && (
-            <div>
-              <label htmlFor="image-url">Image URL:</label>
-              <input type="text" id="image-url" onChange={handleImageUrlChange} />
-              <button onClick={handleSave}>Save</button>
+            <div className={modalStyles.modalForm}>
+              <label htmlFor="image-url" className={modalStyles.modalLabel}>Image URL:</label>
+              <input type="text" id="image-url" onChange={handleImageUrlChange} className={modalStyles.modalInput}/>
+              <button onClick={handleSave} className={modalStyles.modalButton}>Save</button>
             </div>
           )}
         </Modal>
