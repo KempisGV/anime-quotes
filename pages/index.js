@@ -4,6 +4,7 @@ import styles from '@/styles/Home.module.scss'
 import { useEffect, useState } from "react";
 import Quote from '@/components/Quote'
 import Navbar from '@/components/Navbar';
+import { FiRefreshCcw } from "react-icons/fi";
 
 
 const bangers = Bangers({
@@ -38,9 +39,12 @@ export default function Home() {
       </Head>
       <main className={`${styles.main} ${bangers.className}`}>
         <Navbar handleRefresh={handleRefresh} />
+        <button className={styles.floatingButton} onClick={handleRefresh}>
+          <FiRefreshCcw />
+        </button>
         <div className={styles.quoteContainer}>
           {list.map((character)=> (
-            <Quote key={character.character-character.anime} character={character.character} anime={character.anime} quote={character.quote}/>
+            <Quote key={`${character.character}-${character.anime}`} character={character.character} anime={character.anime} quote={character.quote}/>
           ) )}
         </div>
       </main>
