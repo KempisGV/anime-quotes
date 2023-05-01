@@ -121,3 +121,15 @@
 .modalButton:hover {
    background-color: #ff8533;
 }
+
+.modalForm {
+   position: fixed;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   z-index: 100;
+   background-color: white;
+   padding: 20px;
+   border-radius: 10px;
+   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+}

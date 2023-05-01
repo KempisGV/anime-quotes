@@ -12,6 +12,8 @@ const Quote = ({ anime, character, quote }) => {
   const [characters, setCharacters] = useState([]);
   const [characterData, setCharacterData] = useState(null);
   const [imageUrl, setImageUrl] = useState('');
+  const [showAddImageButton, setShowAddImageButton] = useState(true);
+
 
   useEffect(() => {
     axios.get(`${serverURL}/characters`).then((response) => {
@@ -36,6 +38,10 @@ const Quote = ({ anime, character, quote }) => {
 
   const handleImageUrlChange = (event) => {
     setImageUrl(event.target.value);
+  };
+
+  const handleAddImageClick = () => {
+    setShowAddImageButton(false);
   };
 
   const handleSave = () => {
