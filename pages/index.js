@@ -1,21 +1,20 @@
-import Head from 'next/head'
-import { Bangers } from 'next/font/google'
-import styles from '@/styles/Home.module.scss'
-import { useEffect, useState } from "react";
-import Quote from '@/components/Quote'
+import Head from 'next/head';
+import { Bangers } from 'next/font/google';
+import styles from '@/styles/Home.module.scss';
+import { useEffect, useState } from 'react';
+import Quote from '@/components/Quote';
 import Navbar from '@/components/Navbar';
-import { FiRefreshCcw } from "react-icons/fi";
-
+import { FiRefreshCcw } from 'react-icons/fi';
 
 const bangers = Bangers({
   weight: '400',
   subsets: ['latin'],
-})
+});
 
 export default function Home() {
   const [list, setList] = useState([]);
   async function fetchData() {
-    const response = await fetch("https://animechan.vercel.app/api/quotes");
+    const response = await fetch('http://animechan.melosh.space/quotes');
     const data = await response.json();
     return data;
   }
@@ -25,17 +24,17 @@ export default function Home() {
     setList(data);
   }
 
-  useEffect(()=> {
+  useEffect(() => {
     handleRefresh();
-  }, [])
+  }, []);
 
   return (
     <>
       <Head>
         <title>Anime quotes</title>
-        <meta name="description" content="Quotes from anime characters 🗾" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
+        <meta name='description' content='Quotes from anime characters 🗾' />
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <link rel='icon' href='/favicon.ico' />
       </Head>
       <main className={`${styles.main} ${bangers.className}`}>
         <Navbar handleRefresh={handleRefresh} />
@@ -43,11 +42,16 @@ export default function Home() {
           <FiRefreshCcw />
         </button>
         <div className={styles.quoteContainer}>
-          {list.map((character)=> (
-            <Quote key={`${character.character}-${character.anime}`} character={character.character} anime={character.anime} quote={character.quote}/>
-          ) )}
+          {list.map(character => (
+            <Quote
+              key={`${character.character}-${character.anime}`}
+              character={character.character}
+              anime={character.anime}
+              quote={character.quote}
+            />
+          ))}
         </div>
       </main>
     </>
-  )
+  );
 }
