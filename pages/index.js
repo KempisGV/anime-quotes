@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import Quote from '@/components/Quote';
 import Navbar from '@/components/Navbar';
 import { FiRefreshCcw } from 'react-icons/fi';
+const serverURL = process.env.NEXT_PUBLIC_API_URL;
 
 const bangers = Bangers({
   weight: '400',
@@ -14,7 +15,7 @@ const bangers = Bangers({
 export default function Home() {
   const [list, setList] = useState([]);
   async function fetchData() {
-    const response = await fetch('http://animechan.melosh.space/quotes');
+    const response = await fetch(`${serverURL}/characters`);
     const data = await response.json();
     return data;
   }
@@ -43,12 +44,7 @@ export default function Home() {
         </button>
         <div className={styles.quoteContainer}>
           {list.map(character => (
-            <Quote
-              key={`${character.character}-${character.anime}`}
-              character={character.character}
-              anime={character.anime}
-              quote={character.quote}
-            />
+            <Quote key={character._id} character={character} />
           ))}
         </div>
       </main>
