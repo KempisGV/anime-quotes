@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { Bangers } from 'next/font/google';
+import { Bangers, Oswald } from 'next/font/google';
 import styles from '@/styles/Home.module.scss';
 import { useEffect, useState } from 'react';
 import Quote from '@/components/Quote';
@@ -7,7 +7,12 @@ import Navbar from '@/components/Navbar';
 import { FiRefreshCcw } from 'react-icons/fi';
 const serverURL = process.env.NEXT_PUBLIC_API_URL;
 
-const bangers = Bangers({
+// const bangers = Bangers({
+//   weight: '400',
+//   subsets: ['latin'],
+// });
+
+const oswald = Oswald({
   weight: '400',
   subsets: ['latin'],
 });
@@ -23,6 +28,7 @@ export default function Home() {
   async function handleRefresh() {
     const data = await fetchData();
     setList(data);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   useEffect(() => {
@@ -37,7 +43,7 @@ export default function Home() {
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <main className={`${styles.main} ${bangers.className}`}>
+      <main className={`${styles.main} ${oswald.className}`}>
         <Navbar handleRefresh={handleRefresh} />
         <button className={styles.floatingButton} onClick={handleRefresh}>
           <FiRefreshCcw />
