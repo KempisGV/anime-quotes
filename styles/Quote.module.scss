@@ -11,10 +11,9 @@
   height: 320px;
   /* ajusta la altura máxima que quieres para la tarjeta */
 
-  //   img {
-  //     width: 100%;
-  //     object-fit: cover;
-  //   }
+  img {
+    width: 100%;
+  }
 
   .cardInfo {
     padding: 16px;
@@ -47,6 +46,14 @@
       text-overflow: ellipsis;
       -webkit-line-clamp: 4;
       line-clamp: 4;
+    }
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .card {
+    img {
+      max-height: 175px;
     }
   }
 }
