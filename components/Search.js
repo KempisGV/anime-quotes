@@ -13,13 +13,17 @@ const customStyles = {
     boxShadow: 'none',
     minWidth: '200px',
   }),
+  singleValue: (provided, state) => ({
+    ...provided,
+    color: '#AAAAAA', // Cambia el color del texto de la opción seleccionada
+  }),
 };
 
 const Search = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [animeOptions, setAnimeOptions] = useState([]);
   const [selectedAnime, setSelectedAnime] = useState(null);
-  const [placeholder, setPlaceholder] = useState('Select an anime');
+  const [selectedOption, setSelectedOption] = useState(null); // Nuevo estado
 
   // Obtiene el contexto
   const [characterList, setCharacterList] = useContext(CharacterContext);
@@ -68,6 +72,9 @@ const Search = () => {
 
       // Guarda los personajes en el contexto
       setCharacterList(response.data);
+
+      setSelectedAnime(null); // Limpia el valor seleccionado
+      setSelectedOption(null); // Limpia el estado de la opción seleccionada
     } catch (error) {
       console.error('Error searching characters:', error);
     }
@@ -75,7 +82,7 @@ const Search = () => {
 
   const handleSelectChange = option => {
     setSelectedAnime(option);
-    setPlaceholder(option ? option.label : 'Select an anime');
+    setSelectedOption(option); // Actualiza el estado de la opción seleccionada
     setSearchTerm('');
   };
 
@@ -88,7 +95,7 @@ const Search = () => {
       <Select
         styles={customStyles}
         options={filteredOptions}
-        value={selectedAnime}
+        value={selectedOption} // Usa el estado de la opción seleccionada
         onChange={(selectedOption, triggeredAction) => {
           if (triggeredAction.action === 'clear') {
             handleClearSelection();
@@ -97,7 +104,7 @@ const Search = () => {
           }
         }}
         isClearable
-        placeholder={placeholder}
+        placeholder='Select an anime'
       />
       <button onClick={handleSearch}>Search</button>
     </div>
