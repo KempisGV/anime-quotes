@@ -81,9 +81,12 @@
     display: block;
     cursor: pointer;
   }
+  .navbar {
+    padding: 0 10px;
+  }
 }
 
-@media (max-width: 454px) {
+@media (max-width: 385px) {
   .mobileSearch {
     top: 99px;
   }
