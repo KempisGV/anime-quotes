@@ -7,12 +7,15 @@
   flex-direction: column;
   overflow: hidden;
   max-width: 300px;
+  min-width: 300px;
   margin: 16px;
   height: 320px;
   /* ajusta la altura máxima que quieres para la tarjeta */
 
-  img {
+  .cardImage {
     width: 100%;
+    min-height: 175px;
+    max-height: 175px;
   }
 
   .cardInfo {
@@ -46,14 +49,6 @@
       text-overflow: ellipsis;
       -webkit-line-clamp: 3;
       line-clamp: 3;
-    }
-  }
-}
-
-@media only screen and (max-width: 767px) {
-  .card {
-    img {
-      max-height: 175px;
     }
   }
 }

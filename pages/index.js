@@ -1,7 +1,8 @@
 import Head from 'next/head';
 import { Bangers, Oswald } from 'next/font/google';
 import styles from '@/styles/Home.module.scss';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useCallback } from 'react';
+import { CharacterContext } from '@/contexts/CharacterContext';
 import Quote from '@/components/Quote';
 import Navbar from '@/components/Navbar';
 import { FiRefreshCcw } from 'react-icons/fi';
@@ -18,22 +19,22 @@ const oswald = Oswald({
 });
 
 export default function Home() {
-  const [list, setList] = useState([]);
+  const [characterList, setCharacterList] = useContext(CharacterContext);
   async function fetchData() {
     const response = await fetch(`${serverURL}/characters`);
     const data = await response.json();
     return data;
   }
 
-  async function handleRefresh() {
+  const handleRefresh = useCallback(async () => {
     const data = await fetchData();
-    setList(data);
+    setCharacterList(data);
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
+  }, []);
 
   useEffect(() => {
     handleRefresh();
-  }, []);
+  }, [handleRefresh]);
 
   return (
     <>
@@ -49,7 +50,7 @@ export default function Home() {
           <FiRefreshCcw />
         </button>
         <div className={styles.quoteContainer}>
-          {list.map(character => (
+          {characterList.map(character => (
             <Quote key={character._id} character={character} />
           ))}
         </div>

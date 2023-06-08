@@ -47,10 +47,12 @@ const Quote = ({ character: { name, anime, imageURL, quote } }) => {
   return (
     <div className={styles.card} onClick={handleModalOpen}>
       <Image
+        className={styles.cardImage}
         src={newImageURL || defaultImg}
         alt={`${name}-picture`}
         width={300}
         height={175}
+        priority
       />
       <div className={styles.cardInfo}>
         <h3 className={styles.cardName}>{name}</h3>
