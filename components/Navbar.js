@@ -40,7 +40,7 @@ const Navbar = ({ handleRefresh }) => {
         />
         {session ? (
           <>
-            <button onClick={() => signOut()}>Sign out</button>
+            <button onClick={() => signOut()}>Ola</button>
             {/* Aquí va el botón para agregar imagen */}
           </>
         ) : (
