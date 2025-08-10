@@ -1,48 +1,46 @@
-import { useState, useEffect, useContext } from 'react';
-import axios from '../axiosConfig';
-import { CharacterContext } from '@/contexts/CharacterContext';
-import Select from 'react-select';
-import styles from '../styles/Search.module.scss';
+import { useState, useEffect, useContext } from "react";
+import axios from "../axiosConfig";
+import { CharacterContext } from "@/contexts/CharacterContext";
+import Select from "react-select";
+import styles from "../styles/Search.module.scss";
 
 const customStyles = {
-  control: (provided, state) => ({
+  control: (provided) => ({
     ...provided,
-    backgroundColor: '#252525', // Cambia el color de fondo
-    color: '#AAAAAA', // Cambia el color del texto
-    border: 'none',
-    boxShadow: 'none',
-    minWidth: '200px',
+    backgroundColor: "#252525",
+    color: "#AAAAAA",
+    border: "none",
+    boxShadow: "none",
+    minWidth: "200px",
   }),
-  singleValue: (provided, state) => ({
+  singleValue: (provided) => ({
     ...provided,
-    color: '#AAAAAA', // Cambia el color del texto de la opción seleccionada
+    color: "#AAAAAA",
   }),
 };
 
 const Search = () => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [animeOptions, setAnimeOptions] = useState([]);
   const [selectedAnime, setSelectedAnime] = useState(null);
-  const [selectedOption, setSelectedOption] = useState(null); // Nuevo estado
+  const [selectedOption, setSelectedOption] = useState(null);
 
-  // Obtiene el contexto
   const [characterList, setCharacterList] = useContext(CharacterContext);
 
   useEffect(() => {
-    // Obtiene la lista de animes al cargar el componente
     fetchAnimeOptions();
   }, []);
 
   const fetchAnimeOptions = async () => {
     try {
-      const response = await axios.get('/animes');
-      const options = response.data.map(anime => ({
+      const response = await axios.get("/animes");
+      const options = response.data.map((anime) => ({
         value: anime,
         label: anime,
       }));
       setAnimeOptions(options);
     } catch (error) {
-      console.error('Error fetching anime options:', error);
+      console.error("Error fetching anime options:", error);
     }
   };
 
@@ -52,41 +50,34 @@ const Search = () => {
         const response = await axios.get(
           `/characters/search/${selectedAnime.value}`
         );
-
-        // Guarda los personajes en el contexto
         setCharacterList(response.data);
       } else {
-        const response = await axios.get('/characters');
-
-        // Guarda los personajes en el contexto
+        const response = await axios.get("/characters");
         setCharacterList(response.data);
       }
     } catch (error) {
-      console.error('Error searching characters:', error);
+      console.error("Error searching characters:", error);
     }
   };
 
   const handleClearSelection = async () => {
     try {
-      const response = await axios.get('/characters');
-
-      // Guarda los personajes en el contexto
+      const response = await axios.get("/characters");
       setCharacterList(response.data);
-
-      setSelectedAnime(null); // Limpia el valor seleccionado
-      setSelectedOption(null); // Limpia el estado de la opción seleccionada
+      setSelectedAnime(null);
+      setSelectedOption(null);
     } catch (error) {
-      console.error('Error searching characters:', error);
+      console.error("Error searching characters:", error);
     }
   };
 
-  const handleSelectChange = option => {
+  const handleSelectChange = (option) => {
     setSelectedAnime(option);
-    setSelectedOption(option); // Actualiza el estado de la opción seleccionada
-    setSearchTerm('');
+    setSelectedOption(option);
+    setSearchTerm("");
   };
 
-  const filteredOptions = animeOptions.filter(option =>
+  const filteredOptions = animeOptions.filter((option) =>
     option.label.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -95,16 +86,16 @@ const Search = () => {
       <Select
         styles={customStyles}
         options={filteredOptions}
-        value={selectedOption} // Usa el estado de la opción seleccionada
+        value={selectedOption}
         onChange={(selectedOption, triggeredAction) => {
-          if (triggeredAction.action === 'clear') {
+          if (triggeredAction.action === "clear") {
             handleClearSelection();
           } else {
             handleSelectChange(selectedOption);
           }
         }}
         isClearable
-        placeholder='Select an anime'
+        placeholder="Select an anime"
       />
       <button onClick={handleSearch}>Search</button>
     </div>

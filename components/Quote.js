@@ -1,51 +1,53 @@
-import Image from 'next/image';
-import styles from '@/styles/Quote.module.scss';
-import modalStyles from '@/styles/Modal.module.scss';
-import Modal from './Modal';
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useSession } from 'next-auth/react';
-const serverURL = process.env.NEXT_PUBLIC_API_URL;
+import Image from "next/image";
+import styles from "@/styles/Quote.module.scss";
+import modalStyles from "@/styles/Modal.module.scss";
+import Modal from "./Modal";
+import React, { useState } from "react";
+import api from "../axiosConfig"; // usa tu instancia con baseURL
+import { useSession } from "next-auth/react";
 
-const Quote = ({ character: { name, anime, imageURL, quote } }) => {
+const defaultImg = "https://pbs.twimg.com/media/FBfbWyaXsAELFdC.jpg:large";
+
+const Quote = ({ character: { _id, name, anime, imageURL, quote } }) => {
   const [modalOpen, setModalOpen] = useState(false);
-  const [newImageURL, setNewImageURL] = useState(imageURL);
+  const [newImageURL, setNewImageURL] = useState(imageURL || "");
   const { data: session } = useSession();
-  const isAdmin = process.env.NEXT_PUBLIC_ADMINS.split(',')
-    .map(correo => correo.toLowerCase())
-    .includes(session?.user?.email.toLowerCase());
 
-  const handleModalOpen = () => {
-    setModalOpen(true);
-  };
+  // admins seguros (evita crash si la env no existe)
+  const adminList = (process.env.NEXT_PUBLIC_ADMINS || "")
+    .split(",")
+    .map((s) => s.trim().toLowerCase())
+    .filter(Boolean);
 
-  const handleModalClose = () => {
-    setModalOpen(false);
-  };
+  const userEmail = (session?.user?.email || "").toLowerCase();
+  const isAdmin = !!userEmail && adminList.includes(userEmail);
 
-  const handleImageUrlChange = event => {
-    setNewImageURL(event.target.value);
-  };
-
-  const handleUpdate = () => {
-    const newCharacter = {
-      imageURL: newImageURL,
-    };
-    axios
-      .put(`${serverURL}/characters/${character._id}`, newCharacter)
-      .then(() => {
-        setModalOpen(false);
-        setCharacterData(newCharacter);
-      })
-      .catch(error => {
-        console.log(error);
+  const handleUpdate = async () => {
+    try {
+      if (!_id) {
+        console.error("No character id");
+        return;
+      }
+      if (!newImageURL) {
+        console.warn("Empty imageURL; nothing to save");
+        return;
+      }
+      const resp = await api.put(`/characters/${_id}`, {
+        imageURL: newImageURL,
       });
+      // actualiza con lo que devolvió el backend
+      const saved = resp?.data?.imageURL || newImageURL;
+      setNewImageURL(saved);
+      setModalOpen(false);
+      // opcional: pequeño log
+      // console.log("Image updated:", saved);
+    } catch (error) {
+      console.error("PUT /characters/:id failed", error);
+    }
   };
-
-  const defaultImg = 'https://pbs.twimg.com/media/FBfbWyaXsAELFdC.jpg:large';
 
   return (
-    <div className={styles.card} onClick={handleModalOpen}>
+    <div className={styles.card} onClick={() => setModalOpen(true)}>
       <Image
         className={styles.cardImage}
         src={newImageURL || defaultImg}
@@ -59,8 +61,12 @@ const Quote = ({ character: { name, anime, imageURL, quote } }) => {
         <h4 className={styles.cardAnime}>{anime}</h4>
         <p className={styles.cardQuote}>{quote}</p>
       </div>
+
       {modalOpen && (
-        <Modal onClose={handleModalClose} className={modalStyles.modal}>
+        <Modal
+          onClose={() => setModalOpen(false)}
+          className={modalStyles.modal}
+        >
           <Image
             src={newImageURL || defaultImg}
             alt={name}
@@ -71,16 +77,19 @@ const Quote = ({ character: { name, anime, imageURL, quote } }) => {
           <h2 className={modalStyles.modalName}>{name}</h2>
           <p className={modalStyles.modalAnime}>{anime}</p>
           <p className={modalStyles.modalQuote}>{quote}</p>
-          {newImageURL == '' && isAdmin && (
+
+          {isAdmin && (
             <div className={modalStyles.modalForm}>
-              <label htmlFor='image-url' className={modalStyles.modalLabel}>
+              <label htmlFor="image-url" className={modalStyles.modalLabel}>
                 Image URL:
               </label>
               <input
-                type='text'
-                id='image-url'
-                onChange={handleImageUrlChange}
+                type="text"
+                id="image-url"
+                value={newImageURL}
+                onChange={(e) => setNewImageURL(e.target.value)}
                 className={modalStyles.modalInput}
+                placeholder="https://..."
               />
               <button
                 onClick={handleUpdate}

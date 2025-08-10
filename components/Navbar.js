@@ -1,26 +1,26 @@
-import Link from 'next/link';
-import Image from 'next/image';
-import { useState } from 'react';
-import styles from '@/styles/Navbar.module.scss';
-import { signIn, signOut, useSession } from 'next-auth/react';
-import Search from './Search';
-import { AiOutlineSearch } from 'react-icons/ai';
+import Link from "next/link";
+import Image from "next/image";
+import { useState } from "react";
+import styles from "@/styles/Navbar.module.scss";
+import { signIn, signOut, useSession } from "next-auth/react";
+import Search from "./Search";
+import { AiOutlineSearch } from "react-icons/ai";
 
 const Navbar = ({ handleRefresh }) => {
   const { data: session } = useSession();
   const [showMobileSearch, setShowMobileSearch] = useState(false);
 
   const handleSearchIconClick = () => {
-    setShowMobileSearch(!showMobileSearch);
+    setShowMobileSearch((v) => !v);
   };
 
   return (
     <nav className={styles.navbar}>
       <div className={styles.logo}>
-        <Link href='/'>
+        <Link href="/">
           <Image
-            alt='page logo'
-            src='/page-logo.png'
+            alt="page logo"
+            src="/page-logo.png"
             width={175.25}
             height={30.75}
             priority
@@ -34,14 +34,13 @@ const Navbar = ({ handleRefresh }) => {
       <div className={styles.links}>
         <AiOutlineSearch
           size={30}
-          color='#aaaaaa'
+          color="#aaaaaa"
           className={styles.searchIcon}
           onClick={handleSearchIconClick}
         />
         {session ? (
           <>
-            <button onClick={() => signOut()}>Ola</button>
-            {/* Aquí va el botón para agregar imagen */}
+            <button onClick={() => signOut()}>Sign out</button>
           </>
         ) : (
           <button onClick={() => signIn()}>Sign in with Google</button>
@@ -53,7 +52,7 @@ const Navbar = ({ handleRefresh }) => {
 
       <div
         className={`${styles.mobileSearch} ${
-          showMobileSearch ? styles.show : ''
+          showMobileSearch ? styles.show : ""
         }`}
       >
         <Search />

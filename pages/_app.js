@@ -1,17 +1,18 @@
-import '@/styles/globals.scss';
-import { SessionProvider } from 'next-auth/react';
-import { CharacterProvider } from '@/contexts/CharacterContext';
-import { Analytics } from '@vercel/analytics/react';
+import "@/styles/globals.scss";
+import { SessionProvider } from "next-auth/react";
+import { CharacterProvider } from "@/contexts/CharacterContext";
+import { Analytics } from "@vercel/analytics/react";
 
-function App({ Component, pageProps, session }) {
+function App({ Component, pageProps }) {
+  const { session, ...rest } = pageProps || {};
   return (
     <SessionProvider session={session}>
       <CharacterProvider>
-        <Component {...pageProps} />
+        <Component {...rest} />
         <Analytics />
       </CharacterProvider>
     </SessionProvider>
   );
 }
 
-export default App; // Asegúrate de exportar el componente aquí
+export default App;
