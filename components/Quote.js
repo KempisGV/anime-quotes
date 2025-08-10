@@ -35,12 +35,9 @@ const Quote = ({ character: { _id, name, anime, imageURL, quote } }) => {
       const resp = await api.put(`/characters/${_id}`, {
         imageURL: newImageURL,
       });
-      // actualiza con lo que devolvió el backend
       const saved = resp?.data?.imageURL || newImageURL;
       setNewImageURL(saved);
       setModalOpen(false);
-      // opcional: pequeño log
-      // console.log("Image updated:", saved);
     } catch (error) {
       console.error("PUT /characters/:id failed", error);
     }
@@ -55,6 +52,7 @@ const Quote = ({ character: { _id, name, anime, imageURL, quote } }) => {
         width={300}
         height={175}
         priority
+        unoptimized // 👈 evita el bloqueo del optimizer para dominios no listados
       />
       <div className={styles.cardInfo}>
         <h3 className={styles.cardName}>{name}</h3>
@@ -73,6 +71,7 @@ const Quote = ({ character: { _id, name, anime, imageURL, quote } }) => {
             width={500}
             height={500}
             className={modalStyles.modalImage}
+            unoptimized // 👈 también aquí
           />
           <h2 className={modalStyles.modalName}>{name}</h2>
           <p className={modalStyles.modalAnime}>{anime}</p>
